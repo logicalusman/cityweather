@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="std_margin_vertical">8dp</dimen>
+    <dimen name="std_margin_horizontal">16dp</dimen>
+    <dimen name="search_field_corner_radius">50dp</dimen>
+</resources>
