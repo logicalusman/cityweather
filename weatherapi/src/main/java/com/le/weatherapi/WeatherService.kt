@@ -2,8 +2,11 @@ package com.le.weatherapi
 
 import android.content.Context
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class WeatherService(private val context: Context) {
 
@@ -14,15 +17,23 @@ class WeatherService(private val context: Context) {
         }
     }
 
-    suspend fun getWorldCitiesList(): List<City> {
-        return withContext(Dispatchers.IO) {
-            cityList
-        }
+    private val openWeatherService: OpenWeatherService by lazy {
+        Retrofit.Builder()
+            .baseUrl(OPEN_WEATHER_BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
+            .build().create(OpenWeatherService::class.java)
     }
 
+    suspend fun getWorldCitiesList(): List<City> = withContext(Dispatchers.IO) {
+        cityList
+    }
 
     suspend fun searchCities(search: String): List<City> = withContext(Dispatchers.IO) {
         cityList.filter { it.name.contains(other = search, ignoreCase = true) }
+    }
+
+    suspend fun getWeather(cityId: Int) = withContext(Dispatchers.IO) {
+        openWeatherService.getWeather(cityId).toWeather()
     }
 
     private fun readCityListFromJsonFile(): String =
