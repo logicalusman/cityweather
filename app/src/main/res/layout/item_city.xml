@@ -4,6 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
     android:paddingTop="8dp"
     android:paddingBottom="8dp">
 
@@ -20,8 +23,8 @@
         android:id="@+id/state"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
         android:layout_marginTop="4dp"
+        android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/city_name"
         tools:text="State" />
@@ -41,9 +44,9 @@
         android:id="@+id/country"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:layout_marginTop="4dp"
         android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:textSize="14sp"
         app:layout_constraintStart_toEndOf="@+id/separator"
         app:layout_constraintTop_toBottomOf="@+id/city_name"
         tools:text="GB" />
