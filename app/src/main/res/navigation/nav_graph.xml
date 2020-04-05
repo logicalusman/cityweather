@@ -9,6 +9,23 @@
         android:id="@+id/mainFragment"
         android:name="com.le.cityweather.main.ui.MainFragment"
         android:label="main_fragment"
-        tools:layout="@layout/main_fragment" />
+        tools:layout="@layout/main_fragment">
+        <action
+            android:id="@+id/action_mainFragment_to_weatherDetailsFragment"
+            app:destination="@id/weatherDetailsFragment">
+            <argument
+                android:name="city_id"
+                app:argType="integer" />
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/weatherDetailsFragment"
+        android:name="com.le.cityweather.weatherdetails.ui.WeatherDetailsFragment"
+        android:label="weather_details_fragment"
+        tools:layout="@layout/weather_details_fragment">
+        <action
+            android:id="@+id/action_weatherDetailsFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
 
 </navigation>

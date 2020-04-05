@@ -8,7 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.le.cityweather.R
 import com.le.cityweather.model.CityData
 
-class CityAdapter : RecyclerView.Adapter<CityViewHolder>() {
+class CityAdapter(private val onCityClicked: (CityData) -> Unit) :
+    RecyclerView.Adapter<CityViewHolder>() {
 
     private var cityList = listOf<CityData>()
 
@@ -29,7 +30,7 @@ class CityAdapter : RecyclerView.Adapter<CityViewHolder>() {
     override fun getItemCount(): Int = cityList.size
 
     override fun onBindViewHolder(holder: CityViewHolder, position: Int) {
-        holder.bind(cityList[position])
+        holder.bind(cityList[position], onCityClicked)
     }
 }
 
@@ -42,7 +43,7 @@ class CityViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val countryView: TextView = itemView.findViewById(R.id.country)
 
 
-    fun bind(cityData: CityData) {
+    fun bind(cityData: CityData, onCityClicked: (CityData) -> Unit) {
         cityNameView.text = cityData.name
         if (cityData.state.isNotEmpty()) {
             stateView.visibility = View.VISIBLE
@@ -53,6 +54,9 @@ class CityViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             separatorView.visibility = View.GONE
         }
         countryView.text = cityData.countryName
+        itemView.setOnClickListener {
+            onCityClicked(cityData)
+        }
     }
 
 }

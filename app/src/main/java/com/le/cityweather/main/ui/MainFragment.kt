@@ -8,6 +8,7 @@ import android.widget.LinearLayout
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.le.cityweather.R
@@ -21,12 +22,8 @@ import kotlinx.android.synthetic.main.main_fragment.*
 
 class MainFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = MainFragment()
-    }
-
     private lateinit var viewModel: MainViewModel
-    private val cityAdapter = CityAdapter()
+    private lateinit var cityAdapter: CityAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,6 +37,7 @@ class MainFragment : Fragment() {
         viewModel = createMainViewModel()
         setupCityListAdapter()
         observeViewStates()
+        observeViewActions()
         observeSearch()
         viewModel.getCityList()
     }
@@ -51,6 +49,9 @@ class MainFragment : Fragment() {
     }
 
     private fun setupCityListAdapter() {
+        cityAdapter = CityAdapter {
+            viewModel.onCityClicked(it)
+        }
         city_list.apply {
             layoutManager = LinearLayoutManager(context)
             addItemDecoration(
@@ -70,6 +71,18 @@ class MainFragment : Fragment() {
                 is Idle -> {
                     progress.visibility = View.INVISIBLE
                     showData(it.data)
+                }
+            }
+        })
+    }
+
+    private fun observeViewActions() {
+        viewModel.viewAction.observe(viewLifecycleOwner, Observer {
+            when (it) {
+                is MainViewModel.Action.CityClicked -> {
+                    findNavController().navigate(
+                        MainFragmentDirections.actionMainFragmentToWeatherDetailsFragment(it.cityId)
+                    )
                 }
             }
         })
