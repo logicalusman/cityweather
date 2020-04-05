@@ -3,7 +3,8 @@ package com.le.cityweather.main.repository
 import com.le.cityweather.model.CityData
 import com.le.weatherapi.City
 import com.le.weatherapi.WeatherService
-import java.util.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class MainRepository(private val service: WeatherService) {
 
@@ -11,7 +12,11 @@ class MainRepository(private val service: WeatherService) {
         service.getWorldCitiesList().map { it.toCityData() }
 
     suspend fun searchCities(search: String): List<CityData> =
-        service.searchCities(search).map { it.toCityData() }
+        service.searchCities(search).map {
+            withContext(Dispatchers.IO) {
+                it.toCityData()
+            }
+        }
 
 }
 
@@ -20,8 +25,5 @@ private fun City.toCityData() =
         id = id,
         name = name,
         state = state,
-        countryCode = countryCode,
-        countryName = countryCode.countryName()
+        countryCode = countryCode
     )
-
-private fun String.countryName(): String = if (isNullOrBlank()) "" else Locale("", this).displayName

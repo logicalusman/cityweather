@@ -35,7 +35,11 @@ class CityAdapter(private val onCityClicked: (CityData) -> Unit) :
 }
 
 
-class CityViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class CityViewHolder(
+    itemView: View,
+    private val countryNameRetriever: CountryNameRetriever = CountryNameRetriever()
+) :
+    RecyclerView.ViewHolder(itemView) {
 
     private val cityNameView: TextView = itemView.findViewById(R.id.city_name)
     private val separatorView: View = itemView.findViewById(R.id.separator)
@@ -53,7 +57,7 @@ class CityViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             stateView.visibility = View.GONE
             separatorView.visibility = View.GONE
         }
-        countryView.text = cityData.countryName
+        countryView.text = countryNameRetriever.countryName(cityData.countryCode)
         itemView.setOnClickListener {
             onCityClicked(cityData)
         }
