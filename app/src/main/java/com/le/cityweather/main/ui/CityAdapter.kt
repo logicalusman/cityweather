@@ -3,10 +3,14 @@ package com.le.cityweather.main.ui
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.le.cityweather.R
 import com.le.cityweather.model.CityData
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class CityAdapter(private val onCityClicked: (CityData) -> Unit) :
     RecyclerView.Adapter<CityViewHolder>() {
@@ -37,7 +41,7 @@ class CityAdapter(private val onCityClicked: (CityData) -> Unit) :
 
 class CityViewHolder(
     itemView: View,
-    private val countryNameRetriever: CountryNameRetriever = CountryNameRetriever()
+    private val countryViewData: CountryViewData = CountryViewData()
 ) :
     RecyclerView.ViewHolder(itemView) {
 
@@ -45,6 +49,7 @@ class CityViewHolder(
     private val separatorView: View = itemView.findViewById(R.id.separator)
     private val stateView: TextView = itemView.findViewById(R.id.state)
     private val countryView: TextView = itemView.findViewById(R.id.country)
+    private val countryFlag: ImageView = itemView.findViewById(R.id.country_flag)
 
 
     fun bind(cityData: CityData, onCityClicked: (CityData) -> Unit) {
@@ -57,7 +62,12 @@ class CityViewHolder(
             stateView.visibility = View.GONE
             separatorView.visibility = View.GONE
         }
-        countryView.text = countryNameRetriever.countryName(cityData.countryCode)
+        CoroutineScope(Dispatchers.Main).launch {
+            countryViewData.countryData(cityData.countryCode).apply {
+                countryView.text = displayName
+                countryFlag.setImageBitmap(flagBitmap)
+            }
+        }
         itemView.setOnClickListener {
             onCityClicked(cityData)
         }
