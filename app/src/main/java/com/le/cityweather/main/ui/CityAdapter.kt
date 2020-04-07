@@ -11,6 +11,7 @@ import com.le.cityweather.model.CityData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 
 class CityAdapter(private val onCityClicked: (CityData) -> Unit) :
     RecyclerView.Adapter<CityViewHolder>() {
@@ -48,7 +49,7 @@ class CityViewHolder(
     private val cityNameView: TextView = itemView.findViewById(R.id.city_name)
     private val separatorView: View = itemView.findViewById(R.id.separator)
     private val stateView: TextView = itemView.findViewById(R.id.state)
-    private val countryView: TextView = itemView.findViewById(R.id.country)
+    private val countryNameView: TextView = itemView.findViewById(R.id.country)
     private val countryFlag: ImageView = itemView.findViewById(R.id.country_flag)
 
 
@@ -64,7 +65,7 @@ class CityViewHolder(
         }
         CoroutineScope(Dispatchers.Main).launch {
             countryViewData.countryData(cityData.countryCode).apply {
-                countryView.text = displayName
+                countryNameView.text = displayName
                 countryFlag.setImageBitmap(flagBitmap)
             }
         }
