@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.recyclerview.widget.RecyclerView
 import com.le.cityweather.R
-import com.le.cityweather.model.CityData
+import com.le.cityweather.domain.CityData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

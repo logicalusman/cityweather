@@ -10,7 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.le.cityweather.R
 import com.le.cityweather.main.ui.MainActivity
-import com.le.cityweather.model.WeatherData
+import com.le.cityweather.domain.WeatherData
 import com.le.cityweather.weatherdetails.di.createWeatherDetailsViewModel
 import com.le.cityweather.weatherdetails.vm.WeatherDetailsViewModel
 import kotlinx.android.synthetic.main.weather_details_fragment.*

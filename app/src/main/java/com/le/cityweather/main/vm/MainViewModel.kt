@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.le.cityweather.main.repository.MainRepository
-import com.le.cityweather.model.CityData
+import com.le.cityweather.domain.CityData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

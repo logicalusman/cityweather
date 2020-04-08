@@ -1,6 +1,6 @@
 package com.le.cityweather.main.repository
 
-import com.le.cityweather.model.CityData
+import com.le.cityweather.domain.CityData
 import com.le.weatherapi.City
 import com.le.weatherapi.WeatherService
 import kotlinx.coroutines.Dispatchers

@@ -1,4 +1,4 @@
-package com.le.cityweather.model
+package com.le.cityweather.domain
 
 data class CityData(
     val id: Int,

@@ -3,7 +3,7 @@ package com.le.cityweather.weatherdetails.vm
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.le.cityweather.model.WeatherData
+import com.le.cityweather.domain.WeatherData
 import com.le.cityweather.weatherdetails.repository.WeatherDetailsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

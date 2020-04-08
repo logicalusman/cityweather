@@ -1,6 +1,6 @@
 package com.le.cityweather.weatherdetails.repository
 
-import com.le.cityweather.model.WeatherData
+import com.le.cityweather.domain.WeatherData
 import com.le.weatherapi.Weather
 import com.le.weatherapi.WeatherService
 

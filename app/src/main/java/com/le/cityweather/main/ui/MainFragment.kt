@@ -17,7 +17,7 @@ import com.le.cityweather.main.di.createMainViewModel
 import com.le.cityweather.main.vm.MainViewModel
 import com.le.cityweather.main.vm.MainViewModel.MainViewState.Idle
 import com.le.cityweather.main.vm.MainViewModel.MainViewState.Loading
-import com.le.cityweather.model.CityData
+import com.le.cityweather.domain.CityData
 import kotlinx.android.synthetic.main.main_fragment.*
 
 
