@@ -5,15 +5,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.recyclerview.widget.RecyclerView
 import com.le.cityweather.R
 import com.le.cityweather.model.CityData
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.suspendCancellableCoroutine
 
-class CityAdapter(private val onCityClicked: (CityData) -> Unit) :
+class CityAdapter(
+    private val lifecycleCoroutineScope: LifecycleCoroutineScope,
+    private val onCityClicked: (CityData) -> Unit
+) :
     RecyclerView.Adapter<CityViewHolder>() {
 
     private var cityList = listOf<CityData>()
@@ -29,7 +31,8 @@ class CityAdapter(private val onCityClicked: (CityData) -> Unit) :
                 R.layout.item_city,
                 parent,
                 false
-            )
+            ),
+            lifecycleCoroutineScope = lifecycleCoroutineScope
         )
 
     override fun getItemCount(): Int = cityList.size
@@ -42,7 +45,8 @@ class CityAdapter(private val onCityClicked: (CityData) -> Unit) :
 
 class CityViewHolder(
     itemView: View,
-    private val countryViewData: CountryViewData = CountryViewData()
+    private val countryViewData: CountryViewData = CountryViewData(),
+    private val lifecycleCoroutineScope: LifecycleCoroutineScope
 ) :
     RecyclerView.ViewHolder(itemView) {
 
@@ -63,14 +67,18 @@ class CityViewHolder(
             stateView.visibility = View.GONE
             separatorView.visibility = View.GONE
         }
-        CoroutineScope(Dispatchers.Main).launch {
+        bindCountryData(cityData)
+        itemView.setOnClickListener {
+            onCityClicked(cityData)
+        }
+    }
+
+    private fun bindCountryData(cityData: CityData) {
+        lifecycleCoroutineScope.launch(Dispatchers.Main) {
             countryViewData.countryData(cityData.countryCode).apply {
                 countryNameView.text = displayName
                 countryFlag.setImageBitmap(flagBitmap)
             }
-        }
-        itemView.setOnClickListener {
-            onCityClicked(cityData)
         }
     }
 

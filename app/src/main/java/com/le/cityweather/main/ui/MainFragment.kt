@@ -8,6 +8,7 @@ import android.widget.LinearLayout
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -49,7 +50,7 @@ class MainFragment : Fragment() {
     }
 
     private fun setupCityListAdapter() {
-        cityAdapter = CityAdapter {
+        cityAdapter = CityAdapter(lifecycleScope) {
             viewModel.onCityClicked(it)
         }
         city_list.apply {
