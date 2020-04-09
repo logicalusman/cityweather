@@ -74,11 +74,13 @@ class CityViewHolder(
     }
 
     private fun bindCountryData(cityData: CityData) {
+        countryNameView.text = countryViewData.countryName(cityData.countryCode)
+        // tied to the scope of this adapter's fragment lifecycle
         lifecycleCoroutineScope.launch(Dispatchers.Main) {
-            countryViewData.countryData(cityData.countryCode).apply {
-                countryNameView.text = displayName
-                countryFlag.setImageBitmap(flagBitmap)
-            }
+            countryViewData.countryFlag(cityData.countryCode).fold(
+                ifSuccess = { countryFlag.setImageBitmap(it) },
+                ifFailure = { /* do whatever when this fails  */ }
+            )
         }
     }
 
