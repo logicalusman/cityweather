@@ -23,6 +23,9 @@
         android:name="com.le.cityweather.weatherdetails.ui.WeatherDetailsFragment"
         android:label="weather_details_fragment"
         tools:layout="@layout/weather_details_fragment">
+        <argument
+            android:name="city_id"
+            app:argType="integer" />
         <action
             android:id="@+id/action_weatherDetailsFragment_to_mainFragment"
             app:destination="@id/mainFragment" />

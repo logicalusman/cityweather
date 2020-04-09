@@ -23,16 +23,12 @@ class WeatherDetailsViewModel(private val weatherDetailsRepository: WeatherDetai
     val viewState = MutableLiveData<ViewState>()
     val viewAction = MutableLiveData<ViewAction>()
 
-    fun getWeather(cityId: Int?) {
-        cityId?.let {
-            viewState.value = ViewState.Loading
-            viewModelScope.launch(Dispatchers.Main) {
-                viewState.value =
-                    ViewState.Idle(weatherData = weatherDetailsRepository.getWeather(cityId))
-            }
+    fun getWeather(cityId: Int) {
+        viewState.value = ViewState.Loading
+        viewModelScope.launch(Dispatchers.Main) {
+            viewState.value =
+                ViewState.Idle(weatherData = weatherDetailsRepository.getWeather(cityId))
         }
-        // TODO: show error message if id is null
-
     }
 
     fun onBackPressed() {
