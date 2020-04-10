@@ -3,10 +3,16 @@ package com.le.weatherapi
 import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.le.utils.MissingResponseBody
+import com.le.utils.NetworkFailure
+import com.le.utils.Result
+import com.le.utils.asSuccess
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.net.UnknownHostException
 
 class WeatherService(private val context: Context) {
 
@@ -32,9 +38,24 @@ class WeatherService(private val context: Context) {
         cityList.filter { it.name.contains(other = search, ignoreCase = true) }
     }
 
-    suspend fun getWeather(cityId: Int) = withContext(Dispatchers.IO) {
-        openWeatherService.getWeather(cityId).toWeather()
-    }
+    suspend fun <T : Result<Weather>> getWeather(cityId: Int): T =
+        withContext(Dispatchers.IO) {
+            try {
+                val response: Response<OpenWeatherResponse> = openWeatherService.getWeather(cityId)
+                if (response.isSuccessful) {
+                    (response.toWeatherData() ?: toMissingErrorBody()) as T
+                } else {
+                    toNetworkFailure(response.errorBody()?.string()) as T
+                }
+            } catch (e: UnknownHostException) {
+                toNetworkFailure(e.message) as T
+            }
+        }
+
+    private fun toNetworkFailure(errorMessage: String? = null) =
+        Result.Failure<Nothing>(error = NetworkFailure(errorMessage))
+
+    private fun toMissingErrorBody() = Result.Failure<Nothing>(error = MissingResponseBody())
 
     private fun readCityListFromJsonFile(): String =
         context.assets.open("city.list.json").bufferedReader().use {
@@ -54,3 +75,5 @@ private data class JsonCoord(val lon: Double, val lat: Double)
 
 private fun JsonCity.toCity() =
     City(id = id, name = name, state = state, countryCode = country)
+
+private fun Response<OpenWeatherResponse>.toWeatherData() = this.body()?.toWeather()?.asSuccess()

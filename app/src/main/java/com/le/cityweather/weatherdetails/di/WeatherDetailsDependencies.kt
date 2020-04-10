@@ -4,6 +4,7 @@ package com.le.cityweather.weatherdetails.di
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.le.cityweather.common.ResourceProvider
 import com.le.cityweather.weatherdetails.repository.WeatherDetailsRepository
 import com.le.cityweather.weatherdetails.ui.WeatherDetailsFragment
 import com.le.cityweather.weatherdetails.vm.WeatherDetailsViewModel
@@ -20,6 +21,6 @@ private class WeatherDetailsViewModelProviderFactory(private val context: Contex
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         val weatherService = WeatherService(context)
         val repository = WeatherDetailsRepository(weatherService)
-        return WeatherDetailsViewModel(repository) as T
+        return WeatherDetailsViewModel(repository, ResourceProvider(context)) as T
     }
 }

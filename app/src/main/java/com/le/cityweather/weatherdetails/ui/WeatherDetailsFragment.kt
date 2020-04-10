@@ -5,10 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.snackbar.Snackbar
 import com.le.cityweather.R
 import com.le.cityweather.domain.WeatherData
 import com.le.cityweather.main.ui.MainActivity
@@ -16,7 +18,7 @@ import com.le.cityweather.weatherdetails.di.createWeatherDetailsViewModel
 import com.le.cityweather.weatherdetails.vm.WeatherDetailsViewModel
 import kotlinx.android.synthetic.main.weather_details_fragment.*
 
-class WeatherDetailsFragment : Fragment() {
+class WeatherDetailsFragment() : Fragment() {
 
     private lateinit var viewModel: WeatherDetailsViewModel
     private val args: WeatherDetailsFragmentArgs by navArgs()
@@ -70,13 +72,26 @@ class WeatherDetailsFragment : Fragment() {
     private fun observeViewStates() {
         viewModel.viewState.observe(viewLifecycleOwner, Observer {
             when (it) {
-                is WeatherDetailsViewModel.ViewState.Loading -> progress.visibility = View.VISIBLE
+                is WeatherDetailsViewModel.ViewState.Loading -> progress.isVisible = it.show
                 is WeatherDetailsViewModel.ViewState.Idle -> {
                     progress.visibility = View.GONE
                     showWeatherData(it.weatherData)
                 }
+                is WeatherDetailsViewModel.ViewState.ErrorSnackbar -> showErrorSnackbar(
+                    it.errorMessage,
+                    it.action,
+                    it.onActionClick
+                )
             }
         })
+    }
+
+    private fun showErrorSnackbar(errorMessage: String, action: String, onActionClick: () -> Unit) {
+        Snackbar.make(root, errorMessage, Snackbar.LENGTH_INDEFINITE).apply {
+            this.setAction(action) {
+                onActionClick()
+            }
+        }.show()
     }
 
     private fun observeViewActions() {

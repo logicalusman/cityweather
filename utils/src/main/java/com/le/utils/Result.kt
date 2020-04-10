@@ -2,7 +2,8 @@ package com.le.utils
 
 interface FailureEntity
 
-data class NetworkFailure(val throwable: Throwable) : FailureEntity
+data class NetworkFailure(val message: String? = null) : FailureEntity
+data class MissingResponseBody(val message: String? = null) : FailureEntity
 
 sealed class Result<T> {
     data class Success<T>(val data: T) : Result<T>()
@@ -29,13 +30,18 @@ sealed class Result<T> {
                 ifFailure(error)
             }
         }
-
     }
+
+    fun <N> map(block: (T) -> N): Result<N> =
+        when (this) {
+            is Success -> block(this.data).asSuccess()
+            is Failure -> Failure(this.error)
+        }
+
 }
 
 fun <T> T.asSuccess(): Result.Success<T> =
     Result.Success(this)
+
 fun Throwable.asNetworkFailure(): Result.Failure<Nothing> =
-    Result.Failure(
-        NetworkFailure(this)
-    )
+    Result.Failure(NetworkFailure(this.message))

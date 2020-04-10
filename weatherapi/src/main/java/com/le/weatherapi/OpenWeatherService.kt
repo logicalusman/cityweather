@@ -1,5 +1,6 @@
 package com.le.weatherapi
 
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -12,7 +13,7 @@ internal interface OpenWeatherService {
     suspend fun getWeather(
         @Query("id") cityId: Int,
         @Query("appid") appId: String = API_KEY
-    ): OpenWeatherResponse
+    ): Response<OpenWeatherResponse>
 }
 
 internal data class OpenWeatherResponse(
