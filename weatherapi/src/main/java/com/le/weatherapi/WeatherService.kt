@@ -15,15 +15,12 @@ import java.net.UnknownHostException
 
 class WeatherService(
     private val context: Context,
-    private val cityListFromJson: CityListFromLocalJson = CityListFromLocalJson(context)
+    private val cityListFromJson: CityListFromLocalJson = CityListFromLocalJson(context),
+    private val openWeatherService: OpenWeatherService = Retrofit.Builder()
+        .baseUrl(OPEN_WEATHER_BASE_URL)
+        .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
+        .build().create(OpenWeatherService::class.java)
 ) {
-
-    private val openWeatherService: OpenWeatherService by lazy {
-        Retrofit.Builder()
-            .baseUrl(OPEN_WEATHER_BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
-            .build().create(OpenWeatherService::class.java)
-    }
 
     suspend fun getWorldCitiesList(): List<City> = withContext(Dispatchers.IO) {
         cityListFromJson.cityList
