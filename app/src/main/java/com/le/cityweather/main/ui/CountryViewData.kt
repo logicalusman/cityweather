@@ -2,9 +2,9 @@ package com.le.cityweather.main.ui
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import com.le.cityweather.commons.Result
-import com.le.cityweather.commons.asNetworkFailure
-import com.le.cityweather.commons.asSuccess
+import com.le.utils.Result
+import com.le.utils.asNetworkFailure
+import com.le.utils.asSuccess
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.IOException

@@ -1,4 +1,4 @@
-package com.le.cityweather.commons
+package com.le.utils
 
 interface FailureEntity
 
@@ -33,5 +33,9 @@ sealed class Result<T> {
     }
 }
 
-fun <T> T.asSuccess(): Result.Success<T> = Result.Success(this)
-fun Throwable.asNetworkFailure(): Result.Failure<Nothing> = Result.Failure(NetworkFailure(this))
+fun <T> T.asSuccess(): Result.Success<T> =
+    Result.Success(this)
+fun Throwable.asNetworkFailure(): Result.Failure<Nothing> =
+    Result.Failure(
+        NetworkFailure(this)
+    )
