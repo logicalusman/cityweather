@@ -1,7 +1,6 @@
 package com.le.weatherapi
 
 import android.content.Context
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.le.utils.MissingResponseBody
 import com.le.utils.NetworkFailure
@@ -14,14 +13,10 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.net.UnknownHostException
 
-class WeatherService(private val context: Context) {
-
-    private val cityList: List<City> by lazy {
-        val cityListJson = readCityListFromJsonFile()
-        Gson().fromJson<Array<JsonCity>>(cityListJson, Array<JsonCity>::class.java).map {
-            it.toCity()
-        }
-    }
+class WeatherService(
+    private val context: Context,
+    private val cityListFromJson: CityListFromLocalJson = CityListFromLocalJson(context)
+) {
 
     private val openWeatherService: OpenWeatherService by lazy {
         Retrofit.Builder()
@@ -31,11 +26,11 @@ class WeatherService(private val context: Context) {
     }
 
     suspend fun getWorldCitiesList(): List<City> = withContext(Dispatchers.IO) {
-        cityList
+        cityListFromJson.cityList
     }
 
     suspend fun searchCities(search: String): List<City> = withContext(Dispatchers.IO) {
-        cityList.filter { it.name.contains(other = search, ignoreCase = true) }
+        cityListFromJson.cityList.filter { it.name.contains(other = search, ignoreCase = true) }
     }
 
     suspend fun <T : Result<Weather>> getWeather(cityId: Int): T =
@@ -57,23 +52,6 @@ class WeatherService(private val context: Context) {
 
     private fun toMissingErrorBody() = Result.Failure<Nothing>(error = MissingResponseBody())
 
-    private fun readCityListFromJsonFile(): String =
-        context.assets.open("city.list.json").bufferedReader().use {
-            it.readText()
-        }
 }
-
-private data class JsonCity(
-    val id: Int,
-    val name: String,
-    val state: String,
-    val country: String,
-    val coord: JsonCoord
-)
-
-private data class JsonCoord(val lon: Double, val lat: Double)
-
-private fun JsonCity.toCity() =
-    City(id = id, name = name, state = state, countryCode = country)
 
 private fun Response<OpenWeatherResponse>.toWeatherData() = this.body()?.toWeather()?.asSuccess()
