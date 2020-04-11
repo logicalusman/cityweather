@@ -5,10 +5,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.le.cityweather.citylist.repository.CityListRepository
 import com.le.cityweather.domain.CityData
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class CityListViewModel(private val repository: CityListRepository) : ViewModel() {
+class CityListViewModel(
+    private val repository: CityListRepository,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.Main
+) :
+    ViewModel() {
 
     sealed class CityListViewState {
         object Loading : CityListViewState()
@@ -25,14 +30,14 @@ class CityListViewModel(private val repository: CityListRepository) : ViewModel(
     fun getCityList() {
         viewState.apply {
             value = CityListViewState.Loading
-            viewModelScope.launch(Dispatchers.Main) {
+            viewModelScope.launch(dispatcher) {
                 value = CityListViewState.Idle(repository.getCities())
             }
         }
     }
 
     fun searchCity(searchText: String) {
-        viewModelScope.launch(Dispatchers.Main) {
+        viewModelScope.launch(dispatcher) {
             viewState.value = CityListViewState.Idle(repository.searchCities(searchText))
         }
     }
