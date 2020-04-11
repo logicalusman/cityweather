@@ -13,23 +13,23 @@ import org.junit.Test
 import retrofit2.Response
 import java.net.UnknownHostException
 
+private val london = City(1, "London", "", "GB")
+private val newYork = City(2, "New York", "NJ", "US")
+private val saintBabel = City(3, "Saint Babel", "", "FR")
+private val sunset = City(4, "Sunset", "FL", "US")
+private val baraka = City(5, "Baraka", "", "CD")
+private val jsonCityList: List<City> = listOf(london, newYork, saintBabel, sunset, baraka)
+private val openWeatherResponse = OpenWeatherResponse(
+    "London",
+    ApiCoord(0.0, 0.0),
+    listOf(
+        ApiWeather(1, "Rain", "light rain", "")
+    ), 0
+)
+
 class WeatherServiceTest {
 
-    private val london = City(1, "London", "", "GB")
-    private val newYork = City(2, "New York", "NJ", "US")
-    private val saintBabel = City(3, "Saint Babel", "", "FR")
-    private val sunset = City(4, "Sunset", "FL", "US")
-    private val baraka = City(5, "Baraka", "", "CD")
     private val response: Response<OpenWeatherResponse> = mockk()
-    private val openWeatherResponse = OpenWeatherResponse(
-        "London",
-        ApiCoord(0.0, 0.0),
-        listOf(
-            ApiWeather(1, "Rain", "light rain", "")
-        ), 0
-    )
-    private val jsonCityList: List<City> = listOf(london, newYork, saintBabel, sunset, baraka)
-
     private val cityListFromJson: CityListFromLocalJson = mockk {
         every { cityList } answers { jsonCityList }
     }
@@ -104,6 +104,5 @@ class WeatherServiceTest {
             )
         }
     }
-
 
 }
