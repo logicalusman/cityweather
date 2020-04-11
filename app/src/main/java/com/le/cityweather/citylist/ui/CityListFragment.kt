@@ -15,8 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.le.cityweather.R
 import com.le.cityweather.citylist.di.createMainViewModel
 import com.le.cityweather.citylist.vm.CityListViewModel
-import com.le.cityweather.citylist.vm.CityListViewModel.MainViewState.Idle
-import com.le.cityweather.citylist.vm.CityListViewModel.MainViewState.Loading
+import com.le.cityweather.citylist.vm.CityListViewModel.CityListViewState.Idle
+import com.le.cityweather.citylist.vm.CityListViewModel.CityListViewState.Loading
 import com.le.cityweather.domain.CityData
 import kotlinx.android.synthetic.main.city_list_fragment.*
 

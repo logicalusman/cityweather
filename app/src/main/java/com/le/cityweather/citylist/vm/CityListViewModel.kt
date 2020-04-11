@@ -10,30 +10,30 @@ import kotlinx.coroutines.launch
 
 class CityListViewModel(private val repository: CityListRepository) : ViewModel() {
 
-    sealed class MainViewState {
-        object Loading : MainViewState()
-        data class Idle(val data: List<CityData>) : MainViewState()
+    sealed class CityListViewState {
+        object Loading : CityListViewState()
+        data class Idle(val data: List<CityData>) : CityListViewState()
     }
 
     sealed class Action {
         data class CityClicked(val cityId: Int) : Action()
     }
 
-    val viewState = MutableLiveData<MainViewState>()
+    val viewState = MutableLiveData<CityListViewState>()
     val viewAction = MutableLiveData<Action>()
 
     fun getCityList() {
         viewState.apply {
-            value = MainViewState.Loading
+            value = CityListViewState.Loading
             viewModelScope.launch(Dispatchers.Main) {
-                value = MainViewState.Idle(repository.getCities())
+                value = CityListViewState.Idle(repository.getCities())
             }
         }
     }
 
     fun searchCity(searchText: String) {
         viewModelScope.launch(Dispatchers.Main) {
-            viewState.value = MainViewState.Idle(repository.searchCities(searchText))
+            viewState.value = CityListViewState.Idle(repository.searchCities(searchText))
         }
     }
 
