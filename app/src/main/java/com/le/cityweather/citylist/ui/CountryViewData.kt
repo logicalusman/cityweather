@@ -1,4 +1,4 @@
-package com.le.cityweather.main.ui
+package com.le.cityweather.citylist.ui
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory

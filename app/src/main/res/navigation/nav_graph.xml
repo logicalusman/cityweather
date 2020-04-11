@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.le.cityweather.main.ui.MainFragment"
+        android:name="com.le.cityweather.citylist.ui.CityListFragment"
         android:label="main_fragment"
-        tools:layout="@layout/main_fragment">
+        tools:layout="@layout/city_list_fragment">
         <action
             android:id="@+id/action_mainFragment_to_weatherDetailsFragment"
             app:destination="@id/weatherDetailsFragment">

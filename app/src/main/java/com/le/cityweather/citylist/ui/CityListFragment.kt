@@ -1,4 +1,4 @@
-package com.le.cityweather.main.ui
+package com.le.cityweather.citylist.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,24 +13,24 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.le.cityweather.R
-import com.le.cityweather.main.di.createMainViewModel
-import com.le.cityweather.main.vm.MainViewModel
-import com.le.cityweather.main.vm.MainViewModel.MainViewState.Idle
-import com.le.cityweather.main.vm.MainViewModel.MainViewState.Loading
+import com.le.cityweather.citylist.di.createMainViewModel
+import com.le.cityweather.citylist.vm.CityListViewModel
+import com.le.cityweather.citylist.vm.CityListViewModel.MainViewState.Idle
+import com.le.cityweather.citylist.vm.CityListViewModel.MainViewState.Loading
 import com.le.cityweather.domain.CityData
-import kotlinx.android.synthetic.main.main_fragment.*
+import kotlinx.android.synthetic.main.city_list_fragment.*
 
 
-class MainFragment : Fragment() {
+class CityListFragment : Fragment() {
 
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: CityListViewModel
     private lateinit var cityAdapter: CityAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.main_fragment, container, false)
+        return inflater.inflate(R.layout.city_list_fragment, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -80,9 +80,9 @@ class MainFragment : Fragment() {
     private fun observeViewActions() {
         viewModel.viewAction.observe(viewLifecycleOwner, Observer {
             when (it) {
-                is MainViewModel.Action.CityClicked -> {
+                is CityListViewModel.Action.CityClicked -> {
                     findNavController().navigate(
-                        MainFragmentDirections.actionMainFragmentToWeatherDetailsFragment(it.cityId)
+                        CityListFragmentDirections.actionMainFragmentToWeatherDetailsFragment(it.cityId)
                     )
                 }
             }

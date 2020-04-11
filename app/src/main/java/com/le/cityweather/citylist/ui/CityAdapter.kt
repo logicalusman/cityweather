@@ -1,4 +1,4 @@
-package com.le.cityweather.main.ui
+package com.le.cityweather.citylist.ui
 
 import android.view.LayoutInflater
 import android.view.View

@@ -1,4 +1,4 @@
-package com.le.cityweather.main.ui
+package com.le.cityweather.main
 
 import android.os.Bundle
 import android.view.MenuItem

@@ -1,14 +1,14 @@
-package com.le.cityweather.main.vm
+package com.le.cityweather.citylist.vm
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.le.cityweather.main.repository.MainRepository
+import com.le.cityweather.citylist.repository.MainRepository
 import com.le.cityweather.domain.CityData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class MainViewModel(private val repository: MainRepository) : ViewModel() {
+class CityListViewModel(private val repository: MainRepository) : ViewModel() {
 
     sealed class MainViewState {
         object Loading : MainViewState()

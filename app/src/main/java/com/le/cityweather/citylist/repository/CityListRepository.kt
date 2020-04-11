@@ -1,4 +1,4 @@
-package com.le.cityweather.main.repository
+package com.le.cityweather.citylist.repository
 
 import com.le.cityweather.domain.CityData
 import com.le.weatherapi.City
