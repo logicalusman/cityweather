@@ -4,7 +4,7 @@ package com.le.cityweather.weatherdetails.di
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.le.cityweather.common.ResourceProvider
+import com.le.utils.ResourceProvider
 import com.le.cityweather.weatherdetails.repository.WeatherDetailsRepository
 import com.le.cityweather.weatherdetails.ui.WeatherDetailsFragment
 import com.le.cityweather.weatherdetails.vm.WeatherDetailsViewModel
