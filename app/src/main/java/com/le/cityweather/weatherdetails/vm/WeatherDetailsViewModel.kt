@@ -4,15 +4,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.le.cityweather.R
-import com.le.utils.ResourceProvider
 import com.le.cityweather.domain.WeatherData
 import com.le.cityweather.weatherdetails.repository.WeatherDetailsRepository
+import com.le.utils.ResourceProvider
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class WeatherDetailsViewModel(
     private val weatherDetailsRepository: WeatherDetailsRepository,
-    private val resourceProvider: ResourceProvider
+    private val resourceProvider: ResourceProvider,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.Main
 ) :
     ViewModel() {
 
@@ -35,7 +37,7 @@ class WeatherDetailsViewModel(
 
     fun getWeather(cityId: Int) {
         viewState.value = ViewState.Loading(true)
-        viewModelScope.launch(Dispatchers.Main) {
+        viewModelScope.launch(dispatcher) {
             weatherDetailsRepository.getWeather(cityId).fold(
                 ifSuccess = {
                     viewState.value = ViewState.Idle(weatherData = it)
