@@ -44,11 +44,6 @@ class WeatherDetailsFragment() : Fragment() {
         setupToolbar()
     }
 
-    override fun onStop() {
-        super.onStop()
-        removeToolbar()
-    }
-
     private fun setupToolbar() {
         rootActivity.apply {
             setSupportActionBar(toolbar)
@@ -63,10 +58,6 @@ class WeatherDetailsFragment() : Fragment() {
                     viewModel.onBackPressed()
                 }
             })
-    }
-
-    private fun removeToolbar() {
-        rootActivity.setSupportActionBar(null)
     }
 
     private fun observeViewStates() {
