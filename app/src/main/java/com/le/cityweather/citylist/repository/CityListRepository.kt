@@ -4,7 +4,7 @@ import com.le.cityweather.domain.CityData
 import com.le.weatherapi.City
 import com.le.weatherapi.WeatherService
 
-class MainRepository(private val service: WeatherService) {
+class CityListRepository(private val service: WeatherService) {
 
     suspend fun getCities(): List<CityData> =
         service.getWorldCitiesList().map { it.toCityData() }
