@@ -11,7 +11,6 @@ import kotlinx.coroutines.withContext
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.net.UnknownHostException
 
 class WeatherService(
     private val context: Context,
@@ -39,7 +38,7 @@ class WeatherService(
                 } else {
                     toNetworkFailure(response.errorBody()?.string()) as T
                 }
-            } catch (e: UnknownHostException) {
+            } catch (e: Exception) {
                 toNetworkFailure(e.message) as T
             }
         }
