@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/mainFragment">
+    app:startDestination="@id/cityListFragment">
 
     <fragment
-        android:id="@+id/mainFragment"
+        android:id="@+id/cityListFragment"
         android:name="com.le.cityweather.citylist.ui.CityListFragment"
-        android:label="main_fragment"
+        android:label="CityListFragment"
         tools:layout="@layout/city_list_fragment">
         <action
             android:id="@+id/action_mainFragment_to_weatherDetailsFragment"
@@ -28,8 +28,8 @@
             app:argType="integer" />
         <action
             android:id="@+id/action_weatherDetailsFragment_to_mainFragment"
-            app:destination="@id/mainFragment"
-            app:popUpTo="@id/mainFragment"
+            app:destination="@id/cityListFragment"
+            app:popUpTo="@id/cityListFragment"
             app:popUpToInclusive="true" />
     </fragment>
 
