@@ -63,24 +63,23 @@ class WeatherDetailsFragment() : Fragment() {
     private fun observeViewStates() {
         viewModel.viewState.observe(viewLifecycleOwner, Observer {
             when (it) {
-                is WeatherDetailsViewModel.ViewState.Loading -> progress.isVisible = it.show
-                is WeatherDetailsViewModel.ViewState.Idle -> {
+                is WeatherDetailsViewModel.WeatherDetailsViewState.Loading -> progress.isVisible = it.show
+                is WeatherDetailsViewModel.WeatherDetailsViewState.Idle -> {
                     progress.visibility = View.GONE
                     showWeatherData(it.weatherData)
                 }
-                is WeatherDetailsViewModel.ViewState.ErrorSnackbar -> showErrorSnackbar(
+                is WeatherDetailsViewModel.WeatherDetailsViewState.ErrorSnackbar -> showErrorSnackbar(
                     it.errorMessage,
-                    it.action,
-                    it.onActionClick
+                    it.action
                 )
             }
         })
     }
 
-    private fun showErrorSnackbar(errorMessage: String, action: String, onActionClick: () -> Unit) {
+    private fun showErrorSnackbar(errorMessage: String, action: String) {
         Snackbar.make(root, errorMessage, Snackbar.LENGTH_INDEFINITE).apply {
             this.setAction(action) {
-                onActionClick()
+                viewModel.onRetry(args.cityId)
             }
         }.show()
     }

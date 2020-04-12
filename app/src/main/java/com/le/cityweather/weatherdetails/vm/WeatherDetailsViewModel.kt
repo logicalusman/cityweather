@@ -18,43 +18,42 @@ class WeatherDetailsViewModel(
 ) :
     ViewModel() {
 
-    sealed class ViewState {
-        data class Loading(val show: Boolean) : ViewState()
-        data class Idle(val weatherData: WeatherData) : ViewState()
+    sealed class WeatherDetailsViewState {
+        data class Loading(val show: Boolean) : WeatherDetailsViewState()
+        data class Idle(val weatherData: WeatherData) : WeatherDetailsViewState()
         data class ErrorSnackbar(
             val errorMessage: String,
-            val action: String,
-            val onActionClick: () -> Unit
-        ) : ViewState()
+            val action: String
+        ) : WeatherDetailsViewState()
     }
 
     sealed class ViewAction {
         object Finish : ViewAction()
     }
 
-    val viewState = MutableLiveData<ViewState>()
+    val viewState = MutableLiveData<WeatherDetailsViewState>()
     val viewAction = MutableLiveData<ViewAction>()
 
     fun getWeather(cityId: Int) {
-        viewState.value = ViewState.Loading(true)
+        viewState.value = WeatherDetailsViewState.Loading(true)
         viewModelScope.launch(dispatcher) {
             weatherDetailsRepository.getWeather(cityId).fold(
                 ifSuccess = {
-                    viewState.value = ViewState.Idle(weatherData = it)
+                    viewState.value = WeatherDetailsViewState.Idle(weatherData = it)
                 },
                 ifFailure = {
-                    viewState.value = ViewState.Loading(false)
-                    viewState.value = ViewState.ErrorSnackbar(
+                    viewState.value = WeatherDetailsViewState.Loading(false)
+                    viewState.value = WeatherDetailsViewState.ErrorSnackbar(
                         resourceProvider.getString(R.string.error_message),
                         resourceProvider.getString(R.string.action_retry)
-                    ) {
-                        getWeather(cityId)
-                    }
+                    )
                 }
             )
 
         }
     }
+
+    fun onRetry(cityId: Int) = getWeather(cityId)
 
     fun onBackPressed() {
         viewAction.value = ViewAction.Finish
