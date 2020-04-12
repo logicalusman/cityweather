@@ -3,11 +3,11 @@ package com.le.cityweather.citylist.vm
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.le.cityweather.citylist.repository.CityListRepository
-import com.le.cityweather.citylist.vm.CityListViewModel.Action
-import com.le.cityweather.citylist.vm.CityListViewModel.Action.CityClicked
-import com.le.cityweather.citylist.vm.CityListViewModel.CityListViewState
-import com.le.cityweather.citylist.vm.CityListViewModel.CityListViewState.Idle
-import com.le.cityweather.citylist.vm.CityListViewModel.CityListViewState.Loading
+import com.le.cityweather.citylist.vm.CityListViewModel.ViewAction
+import com.le.cityweather.citylist.vm.CityListViewModel.ViewAction.CityClicked
+import com.le.cityweather.citylist.vm.CityListViewModel.ViewState
+import com.le.cityweather.citylist.vm.CityListViewModel.ViewState.Idle
+import com.le.cityweather.citylist.vm.CityListViewModel.ViewState.Loading
 import com.le.cityweather.domain.CityData
 import io.mockk.coEvery
 import io.mockk.every
@@ -38,12 +38,12 @@ class CityListViewModelTest {
         coEvery { getCities() } answers { cityList }
         coEvery { searchCities(citySearchString) } answers { searchedCityList }
     }
-    private val capturedViewStates = mutableListOf<CityListViewState>()
-    private val mockViewStateObserver: Observer<CityListViewState> = mockk {
+    private val capturedViewStates = mutableListOf<ViewState>()
+    private val mockViewStateObserver: Observer<ViewState> = mockk {
         every { onChanged(capture(capturedViewStates)) } answers { Unit }
     }
-    private val capturedActions = mutableListOf<Action>()
-    private val mockActionObserver: Observer<Action> = mockk {
+    private val capturedActions = mutableListOf<ViewAction>()
+    private val mockViewActionObserver: Observer<ViewAction> = mockk {
         every { onChanged(capture(capturedActions)) } answers { Unit }
     }
     private val cityListViewModel = CityListViewModel(
@@ -53,7 +53,7 @@ class CityListViewModelTest {
 
     @Test
     fun `notifies loading and idle state with data to the observer when gets city list`() {
-        cityListViewModel.viewState.observeForever(mockViewStateObserver)
+        cityListViewModel.viewStateLiveData.observeForever(mockViewStateObserver)
         testDispatcher.runBlockingTest {
             cityListViewModel.getCityList()
 
@@ -63,7 +63,7 @@ class CityListViewModelTest {
 
     @Test
     fun `notifies idle state with searched city list to the observer`() {
-        cityListViewModel.viewState.observeForever(mockViewStateObserver)
+        cityListViewModel.viewStateLiveData.observeForever(mockViewStateObserver)
         testDispatcher.runBlockingTest {
             cityListViewModel.searchCity(citySearchString)
 
@@ -73,7 +73,7 @@ class CityListViewModelTest {
 
     @Test
     fun `notifies city id to the observer on city click action`() {
-        cityListViewModel.viewAction.observeForever(mockActionObserver)
+        cityListViewModel.viewActionLiveData.observeForever(mockViewActionObserver)
         testDispatcher.runBlockingTest {
             cityListViewModel.onCityClicked(london)
 

@@ -15,34 +15,34 @@ class CityListViewModel(
 ) :
     ViewModel() {
 
-    sealed class CityListViewState {
-        object Loading : CityListViewState()
-        data class Idle(val data: List<CityData>) : CityListViewState()
+    sealed class ViewState {
+        object Loading : ViewState()
+        data class Idle(val data: List<CityData>) : ViewState()
     }
 
-    sealed class Action {
-        data class CityClicked(val cityId: Int) : Action()
+    sealed class ViewAction {
+        data class CityClicked(val cityId: Int) : ViewAction()
     }
 
-    val viewState = MutableLiveData<CityListViewState>()
-    val viewAction = MutableLiveData<Action>()
+    val viewStateLiveData = MutableLiveData<ViewState>()
+    val viewActionLiveData = MutableLiveData<ViewAction>()
 
     fun getCityList() {
-        viewState.apply {
-            value = CityListViewState.Loading
+        viewStateLiveData.apply {
+            value = ViewState.Loading
             viewModelScope.launch(dispatcher) {
-                value = CityListViewState.Idle(repository.getCities())
+                value = ViewState.Idle(repository.getCities())
             }
         }
     }
 
     fun searchCity(searchText: String) {
         viewModelScope.launch(dispatcher) {
-            viewState.value = CityListViewState.Idle(repository.searchCities(searchText))
+            viewStateLiveData.value = ViewState.Idle(repository.searchCities(searchText))
         }
     }
 
     fun onCityClicked(cityData: CityData) {
-        viewAction.value = Action.CityClicked(cityData.id)
+        viewActionLiveData.value = ViewAction.CityClicked(cityData.id)
     }
 }

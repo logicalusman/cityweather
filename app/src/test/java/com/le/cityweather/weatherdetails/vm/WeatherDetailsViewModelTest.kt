@@ -5,8 +5,8 @@ import androidx.lifecycle.Observer
 import com.le.cityweather.domain.WeatherData
 import com.le.cityweather.weatherdetails.repository.WeatherDetailsRepository
 import com.le.cityweather.weatherdetails.vm.WeatherDetailsViewModel.ViewAction
-import com.le.cityweather.weatherdetails.vm.WeatherDetailsViewModel.WeatherDetailsViewState
-import com.le.cityweather.weatherdetails.vm.WeatherDetailsViewModel.WeatherDetailsViewState.Loading
+import com.le.cityweather.weatherdetails.vm.WeatherDetailsViewModel.ViewState
+import com.le.cityweather.weatherdetails.vm.WeatherDetailsViewModel.ViewState.Loading
 import com.le.utils.NetworkFailure
 import com.le.utils.ResourceProvider
 import com.le.utils.Result
@@ -31,8 +31,8 @@ class WeatherDetailsViewModelTest {
     @JvmField
     val instantExecutorRule = InstantTaskExecutorRule()
 
-    private val capturedViewStates = mutableListOf<WeatherDetailsViewState>()
-    private val mockViewStateObserver: Observer<WeatherDetailsViewState> = mockk {
+    private val capturedViewStates = mutableListOf<ViewState>()
+    private val mockViewStateObserver: Observer<ViewState> = mockk {
         every { onChanged(capture(capturedViewStates)) } answers { Unit }
     }
     private val capturedActionStates = mutableListOf<ViewAction>()
@@ -52,18 +52,18 @@ class WeatherDetailsViewModelTest {
     @Test
     fun `notifies loading and idle state with data to the observer when gets weather of the given city id successfully`() {
         coEvery { weatherDetailsRepository.getWeather(cityId) } answers { weatherData.asSuccess() }
-        weatherDetailsViewModel.viewState.observeForever(mockViewStateObserver)
+        weatherDetailsViewModel.viewStateLiveData.observeForever(mockViewStateObserver)
         testDispatcher.runBlockingTest {
             weatherDetailsViewModel.getWeather(cityId)
 
-            assertEquals(listOf(Loading(true), WeatherDetailsViewState.Idle(weatherData)), capturedViewStates)
+            assertEquals(listOf(Loading(true), ViewState.Idle(weatherData)), capturedViewStates)
         }
     }
 
     @Test
     fun `notifies loading and error states to the observer when fails to get weather of the given city id`() {
         coEvery { weatherDetailsRepository.getWeather(cityId) } answers { Result.Failure(NetworkFailure()) }
-        weatherDetailsViewModel.viewState.observeForever(mockViewStateObserver)
+        weatherDetailsViewModel.viewStateLiveData.observeForever(mockViewStateObserver)
         testDispatcher.runBlockingTest {
             weatherDetailsViewModel.getWeather(cityId)
 
@@ -71,7 +71,7 @@ class WeatherDetailsViewModelTest {
                 mutableListOf(
                     Loading(true),
                     Loading(false),
-                    WeatherDetailsViewState.ErrorSnackbar(anyString(), anyString())
+                    ViewState.ErrorSnackbar(anyString(), anyString())
                 ),
                 capturedViewStates
             )
@@ -80,7 +80,7 @@ class WeatherDetailsViewModelTest {
 
     @Test
     fun `notifies finish state to the observer when on back pressed`() {
-        weatherDetailsViewModel.viewAction.observeForever(mockViewActionStateObserver)
+        weatherDetailsViewModel.viewActionLiveData.observeForever(mockViewActionStateObserver)
         testDispatcher.runBlockingTest {
             weatherDetailsViewModel.onBackPressed()
 

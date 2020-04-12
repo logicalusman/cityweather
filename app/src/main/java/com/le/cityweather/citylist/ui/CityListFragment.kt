@@ -15,8 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.le.cityweather.R
 import com.le.cityweather.citylist.di.createMainViewModel
 import com.le.cityweather.citylist.vm.CityListViewModel
-import com.le.cityweather.citylist.vm.CityListViewModel.CityListViewState.Idle
-import com.le.cityweather.citylist.vm.CityListViewModel.CityListViewState.Loading
+import com.le.cityweather.citylist.vm.CityListViewModel.ViewState.Idle
+import com.le.cityweather.citylist.vm.CityListViewModel.ViewState.Loading
 import com.le.cityweather.domain.CityData
 import kotlinx.android.synthetic.main.city_list_fragment.*
 
@@ -66,7 +66,7 @@ class CityListFragment : Fragment() {
     }
 
     private fun observeViewStates() {
-        viewModel.viewState.observe(viewLifecycleOwner, Observer {
+        viewModel.viewStateLiveData.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Loading -> progress.visibility = View.VISIBLE
                 is Idle -> {
@@ -78,9 +78,9 @@ class CityListFragment : Fragment() {
     }
 
     private fun observeViewActions() {
-        viewModel.viewAction.observe(viewLifecycleOwner, Observer {
+        viewModel.viewActionLiveData.observe(viewLifecycleOwner, Observer {
             when (it) {
-                is CityListViewModel.Action.CityClicked -> {
+                is CityListViewModel.ViewAction.CityClicked -> {
                     findNavController().navigate(
                         CityListFragmentDirections.actionMainFragmentToWeatherDetailsFragment(it.cityId)
                     )

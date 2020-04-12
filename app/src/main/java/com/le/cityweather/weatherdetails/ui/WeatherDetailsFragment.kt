@@ -61,14 +61,14 @@ class WeatherDetailsFragment() : Fragment() {
     }
 
     private fun observeViewStates() {
-        viewModel.viewState.observe(viewLifecycleOwner, Observer {
+        viewModel.viewStateLiveData.observe(viewLifecycleOwner, Observer {
             when (it) {
-                is WeatherDetailsViewModel.WeatherDetailsViewState.Loading -> progress.isVisible = it.show
-                is WeatherDetailsViewModel.WeatherDetailsViewState.Idle -> {
+                is WeatherDetailsViewModel.ViewState.Loading -> progress.isVisible = it.show
+                is WeatherDetailsViewModel.ViewState.Idle -> {
                     progress.visibility = View.GONE
                     showWeatherData(it.weatherData)
                 }
-                is WeatherDetailsViewModel.WeatherDetailsViewState.ErrorSnackbar -> showErrorSnackbar(
+                is WeatherDetailsViewModel.ViewState.ErrorSnackbar -> showErrorSnackbar(
                     it.errorMessage,
                     it.action
                 )
@@ -85,7 +85,7 @@ class WeatherDetailsFragment() : Fragment() {
     }
 
     private fun observeViewActions() {
-        viewModel.viewAction.observe(viewLifecycleOwner, Observer {
+        viewModel.viewActionLiveData.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is WeatherDetailsViewModel.ViewAction.Finish -> findNavController().navigate(
                     WeatherDetailsFragmentDirections.actionWeatherDetailsFragmentToMainFragment()

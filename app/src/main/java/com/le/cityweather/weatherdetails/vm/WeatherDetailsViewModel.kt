@@ -18,32 +18,32 @@ class WeatherDetailsViewModel(
 ) :
     ViewModel() {
 
-    sealed class WeatherDetailsViewState {
-        data class Loading(val show: Boolean) : WeatherDetailsViewState()
-        data class Idle(val weatherData: WeatherData) : WeatherDetailsViewState()
+    sealed class ViewState {
+        data class Loading(val show: Boolean) : ViewState()
+        data class Idle(val weatherData: WeatherData) : ViewState()
         data class ErrorSnackbar(
             val errorMessage: String,
             val action: String
-        ) : WeatherDetailsViewState()
+        ) : ViewState()
     }
 
     sealed class ViewAction {
         object Finish : ViewAction()
     }
 
-    val viewState = MutableLiveData<WeatherDetailsViewState>()
-    val viewAction = MutableLiveData<ViewAction>()
+    val viewStateLiveData = MutableLiveData<ViewState>()
+    val viewActionLiveData = MutableLiveData<ViewAction>()
 
     fun getWeather(cityId: Int) {
-        viewState.value = WeatherDetailsViewState.Loading(true)
+        viewStateLiveData.value = ViewState.Loading(true)
         viewModelScope.launch(dispatcher) {
             weatherDetailsRepository.getWeather(cityId).fold(
                 ifSuccess = {
-                    viewState.value = WeatherDetailsViewState.Idle(weatherData = it)
+                    viewStateLiveData.value = ViewState.Idle(weatherData = it)
                 },
                 ifFailure = {
-                    viewState.value = WeatherDetailsViewState.Loading(false)
-                    viewState.value = WeatherDetailsViewState.ErrorSnackbar(
+                    viewStateLiveData.value = ViewState.Loading(false)
+                    viewStateLiveData.value = ViewState.ErrorSnackbar(
                         resourceProvider.getString(R.string.error_message),
                         resourceProvider.getString(R.string.action_retry)
                     )
@@ -56,7 +56,7 @@ class WeatherDetailsViewModel(
     fun onRetry(cityId: Int) = getWeather(cityId)
 
     fun onBackPressed() {
-        viewAction.value = ViewAction.Finish
+        viewActionLiveData.value = ViewAction.Finish
     }
 
 
