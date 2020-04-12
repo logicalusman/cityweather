@@ -26,6 +26,7 @@ private val baraka = CityData(5, "Baraka", "", "CD")
 private val cityList: List<CityData> = listOf(london, newYork, saintBabel, sunset, baraka)
 private const val citySearchString = "o"
 private val searchedCityList: List<CityData> = listOf(london, newYork)
+private val testDispatcher = TestCoroutineDispatcher()
 
 class CityListViewModelTest {
 
@@ -45,8 +46,10 @@ class CityListViewModelTest {
     private val mockActionObserver: Observer<Action> = mockk {
         every { onChanged(capture(capturedActions)) } answers { Unit }
     }
-    private val testDispatcher = TestCoroutineDispatcher()
-    private val cityListViewModel = CityListViewModel(cityListRepository, testDispatcher)
+    private val cityListViewModel = CityListViewModel(
+        repository = cityListRepository,
+        dispatcher = testDispatcher
+    )
 
     @Test
     fun `notifies loading and idle state with data to the observer when gets city list`() {
