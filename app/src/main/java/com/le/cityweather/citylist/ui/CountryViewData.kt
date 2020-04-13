@@ -20,13 +20,10 @@ class CountryViewData {
     suspend fun countryFlag(countryISOCode: String): Result<out Bitmap> =
         withContext(Dispatchers.IO) {
             try {
-                val url: URL =
-                    URL("https://www.countryflags.io/${countryISOCode.toLowerCase(Locale.getDefault())}/flat/64.png")
-                return@withContext BitmapFactory.decodeStream(url.openConnection().getInputStream())
-                    .asSuccess()
+                val url: URL = URL("https://www.countryflags.io/${countryISOCode.toLowerCase(Locale.getDefault())}/flat/64.png")
+                BitmapFactory.decodeStream(url.openConnection().getInputStream()).asSuccess()
             } catch (e: IOException) {
-                return@withContext e.asNetworkFailure()
+                e.asNetworkFailure()
             }
-
         }
 }
