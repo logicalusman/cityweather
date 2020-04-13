@@ -6,6 +6,8 @@ This project is a demonstration of using coroutines alongside viewmodel and live
 1. `suspend` functions
 2. coroutine builders, such as `launch`
 
+https://medium.com/@linkusman21/a-practical-guide-to-coroutines-7955167f2744
+
 ### Architecture and overall structure
 Architecture is MVVM based.
 
